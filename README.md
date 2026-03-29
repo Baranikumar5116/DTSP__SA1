@@ -1,4 +1,4 @@
-# Audio Noise Reduction and Analysis
+# Audio Analysis And Noise Reduction
 
 ## AIM
 
@@ -44,14 +44,8 @@ Noise in audio signals reduces clarity and quality. Noise reduction techniques r
 ## PROGRAM: 
 
 ~~~
-# =========================
-# INSTALL LIBRARIES
-# =========================
 !pip install noisereduce pedalboard librosa soundfile
 
-# =========================
-# IMPORT LIBRARIES
-# =========================
 import librosa
 import librosa.display
 import noisereduce as nr
@@ -62,9 +56,6 @@ import soundfile as sf
 import matplotlib.pyplot as plt
 import numpy as np
 
-# =========================
-# UPLOAD AUDIO FILE
-# =========================
 print("Please upload your audio file (.wav recommended)")
 uploaded = files.upload()
 
@@ -75,40 +66,22 @@ if uploaded:
 else:
     raise FileNotFoundError("No audio file uploaded.")
 
-# =========================
-# LOAD AUDIO
-# =========================
 y, sr = librosa.load(file_path, sr=None)
 
-# =========================
-# NOISE REDUCTION
-# =========================
 y_denoised = nr.reduce_noise(y=y, sr=sr, prop_decrease=1.0)
 
-# =========================
-# OPTIONAL EFFECT (GAIN)
-# =========================
 board = Pedalboard([Gain(gain_db=0)])  # Change gain if needed
 y_processed = board(y_denoised, sr)
 
-# =========================
-# SAVE OUTPUT
-# =========================
 output_file_name = "output_denoised_audio.wav"
 sf.write(output_file_name, y_processed, sr)
 
-# =========================
-# PLAY AUDIO
-# =========================
 print("Original Audio:")
 display(Audio(file_path))
 
 print("Denoised Audio:")
 display(Audio(output_file_name))
 
-# =========================
-# SPECTROGRAM ANALYSIS
-# =========================
 D_original = librosa.stft(y)
 D_processed = librosa.stft(y_processed)
 
@@ -130,9 +103,7 @@ plt.title('Denoised Audio Spectrogram')
 plt.tight_layout()
 plt.show()
 
-# =========================
-# NOISE SPECTROGRAM
-# =========================
+
 noise_signal = y - y_processed
 D_noise = librosa.stft(noise_signal)
 DB_noise = librosa.amplitude_to_db(np.abs(D_noise), ref=np.max)
@@ -144,9 +115,6 @@ plt.title('Estimated Noise Spectrogram')
 plt.tight_layout()
 plt.show()
 
-# =========================
-# TIME DOMAIN PLOTS
-# =========================
 time = np.linspace(0, len(y) / sr, num=len(y))
 
 plt.figure(figsize=(15, 5))
@@ -172,13 +140,10 @@ print("Noise reduction completed successfully!")
 ~~~
 
 # OUTPUT: 
-### Spectrogram of Original and Denoised Signals:
 
-<img width="1351" height="790" alt="image" src="https://github.com/user-attachments/assets/b92462e7-bbba-4fa8-af35-3f58fb3ef869" />
-
-### Plot of Original and Denoised Signals:
-
-<img width="1488" height="490" alt="download" src="https://github.com/user-attachments/assets/b7c39acf-f17a-4839-8cba-5145afc3a800" />
+<img width="1351" height="790" alt="download" src="https://github.com/user-attachments/assets/a73ddddd-b4e1-4fe5-8d69-40a23a1f20b4" />
+<img width="1105" height="590" alt="download" src="https://github.com/user-attachments/assets/30a20158-5d63-4e33-af4e-1ba0cc074183" />
+<img width="1489" height="490" alt="download" src="https://github.com/user-attachments/assets/23380b15-82c9-491d-b945-f53e7d260d3e" />
 
 ---
 
